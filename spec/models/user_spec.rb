@@ -25,7 +25,7 @@ describe User do
 
   end
 
-  it "should update existing user in database"
+  it "should update existing user in database" do
 
     auth_updated = {
       :provider => "google_oauth2",
