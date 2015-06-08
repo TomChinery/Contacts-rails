@@ -4,11 +4,13 @@ class Contact < ActiveRecord::Base
 
   include HTTParty
 
-  def self.all!(token)
+  def self.all!(token, email)
 
     headers = { "Authorization" => "Bearer " + token, "GData-Version" => "3.0" }
 
-    response = HTTParty.get("https://www.google.com/m8/feeds/contacts/hello@tomchinery.com/full", :headers => headers)
+    response = HTTParty.get("https://www.google.com/m8/feeds/contacts/#{email}/full", :headers => headers)
+
+    binding.pry
   end
 
   def xml_to_object(xml_string)
