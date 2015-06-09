@@ -12,9 +12,14 @@ class Contact < ActiveRecord::Base
 
     gmail_xml = Nokogiri::XML(response)
 
+    collect_xml_data(gmail_xml)
+
+  end
+
+  def self.collect_xml_data(xml)
     contacts = []
 
-    gmail_xml.css("entry").each do |entry|
+    xml.css("entry").each do |entry|
 
       name = entry.css("gd|fullName").text
 
@@ -32,8 +37,7 @@ class Contact < ActiveRecord::Base
 
     end
 
-    binding.pry
-
+    return contacts
   end
 
 
