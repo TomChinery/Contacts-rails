@@ -8,5 +8,7 @@ class HomeController < ApplicationController
 
     @sorted_contacts = contacts.sort_by { |k| k[:name] }
 
+    @paginated_contacts = @sorted_contacts.paginate(:page => params[:page], :per_page => 30)
+
   end
 end
