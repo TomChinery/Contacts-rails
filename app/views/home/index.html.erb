@@ -3,7 +3,7 @@
 
 <% if current_user %>
 
-  <% @contacts.each do |contact| %>
+  <% @sorted_contacts.each do |contact| %>
     <div class="contact">
       <label>Name: <span><%= contact[:name] %></span></label>
       <label>Email: <span><%= contact[:email] %></span></label>
