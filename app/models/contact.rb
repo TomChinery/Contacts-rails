@@ -1,7 +1,5 @@
 class Contact < ActiveRecord::Base
 
-  belongs_to :user
-
   include HTTParty
 
   def self.all!(token, email)
