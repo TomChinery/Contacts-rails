@@ -202,6 +202,7 @@ DEPENDENCIES
   httparty
   jbuilder (~> 2.0)
   jquery-rails
+  nokogiri
   omniauth-google-oauth2
   pry
   rails (= 4.2.1)
