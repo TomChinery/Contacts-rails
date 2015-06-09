@@ -1,16 +1,25 @@
 require 'spec_helper'
 
 describe Contact do
-  it "should grab contacts from Google" do
+  it "should return contacts from Google" do
 
-    contacts = Contact.all!
+    response = "<feed xmlns='http://www.w3.org/2005/Atom' xmlns:openSearch='http://a9.com/-/spec/opensearch/1.1/' xmlns:gContact='http://schemas.google.com/contact/2008' xmlns:batch='http://schemas.google.com/gdata/batch' xmlns:gd='http://schemas.google.com/g/2005' gd:etag='feedEtag'> <id>userEmail</id> <updated>2008-12-10T10:04:15.446Z</updated> <category scheme='http://schemas.google.com/g/2005#kind' term='http://schemas.google.com/contact/2008#contact'/> <title>User's Contacts</title> <link rel='http://schemas.google.com/g/2005#feed' type='application/atom+xml' href='https://www.google.com/m8/feeds/contacts/userEmail/full'/> <link rel='http://schemas.google.com/g/2005#post' type='application/atom+xml' href='https://www.google.com/m8/feeds/contacts/userEmail/full'/> <link rel='http://schemas.google.com/g/2005#batch' type='application/atom+xml' href='https://www.google.com/m8/feeds/contacts/userEmail/full/batch'/> <link rel='self' type='application/atom+xml' href='https://www.google.com/m8/feeds/contacts/userEmail/full?max-results=25'/> <author> <name>User</name> <email>userEmail</email> </author> <generator version='1.0' uri='http://www.google.com/m8/feeds'> Contacts </generator> <openSearch:totalResults>1</openSearch:totalResults> <openSearch:startIndex>1</openSearch:startIndex> <openSearch:itemsPerPage>25</openSearch:itemsPerPage> <entry gd:etag='contactEtag'> <id> http://www.google.com/m8/feeds/contacts/userEmail/base/contactId </id> <updated>2008-12-10T04:45:03.331Z</updated> <app:edited xmlns:app='http://www.w3.org/2007/app'>2008-12-10T04:45:03.331Z</app:edited> <category scheme='http://schemas.google.com/g/2005#kind' term='http://schemas.google.com/contact/2008#contact'/> <title>Fitzwilliam Darcy</title> <gd:name> <gd:fullName>Tom Chinery</gd:fullName> </gd:name> <link rel='http://schemas.google.com/contacts/2008/rel#photo' type='image/*' href='https://www.google.com/m8/feeds/photos/media/userEmail/contactId' gd:etag='photoEtag'/> <link rel='self' type='application/atom+xml' href='https://www.google.com/m8/feeds/contacts/userEmail/full/contactId'/> <link rel='edit' type='application/atom+xml' href='https://www.google.com/m8/feeds/contacts/userEmail/full/contactId'/> <gd:phoneNumber rel='http://schemas.google.com/g/2005#home' primary='true'> 456 </gd:phoneNumber> <gd:extendedProperty name='pet' value='hamster'/> <gContact:groupMembershipInfo deleted='false' href='http://www.google.com/m8/feeds/groups/userEmail/base/groupId'/> </entry> </feed>"
 
-    assert_equals
+    stub_request(:get, "https://www.google.com/m8/feeds/contacts/hello@tomchinery.com/full?max-results=100").
+      with(:headers => {'Authorization'=>'Bearer 12345678', 'Gdata-Version'=>'3.0'}).
+      to_return(:status => 200, :body => response, :headers => {})
+
+    assert_equal [{:name=>"Tom Chinery", :email=>"", :phone=>" 456 "}], Contact.all!("12345678", "hello@tomchinery.com")
+
   end
 
-  it "should parse xml to object" do
+  it "should convert xml to array of contacts" do
 
-    Contact.xml_to_object(some_xml)
+    response = "<feed xmlns='http://www.w3.org/2005/Atom' xmlns:openSearch='http://a9.com/-/spec/opensearch/1.1/' xmlns:gContact='http://schemas.google.com/contact/2008' xmlns:batch='http://schemas.google.com/gdata/batch' xmlns:gd='http://schemas.google.com/g/2005' gd:etag='feedEtag'> <id>userEmail</id> <updated>2008-12-10T10:04:15.446Z</updated> <category scheme='http://schemas.google.com/g/2005#kind' term='http://schemas.google.com/contact/2008#contact'/> <title>User's Contacts</title> <link rel='http://schemas.google.com/g/2005#feed' type='application/atom+xml' href='https://www.google.com/m8/feeds/contacts/userEmail/full'/> <link rel='http://schemas.google.com/g/2005#post' type='application/atom+xml' href='https://www.google.com/m8/feeds/contacts/userEmail/full'/> <link rel='http://schemas.google.com/g/2005#batch' type='application/atom+xml' href='https://www.google.com/m8/feeds/contacts/userEmail/full/batch'/> <link rel='self' type='application/atom+xml' href='https://www.google.com/m8/feeds/contacts/userEmail/full?max-results=25'/> <author> <name>User</name> <email>userEmail</email> </author> <generator version='1.0' uri='http://www.google.com/m8/feeds'> Contacts </generator> <openSearch:totalResults>1</openSearch:totalResults> <openSearch:startIndex>1</openSearch:startIndex> <openSearch:itemsPerPage>25</openSearch:itemsPerPage> <entry gd:etag='contactEtag'> <id> http://www.google.com/m8/feeds/contacts/userEmail/base/contactId </id> <updated>2008-12-10T04:45:03.331Z</updated> <app:edited xmlns:app='http://www.w3.org/2007/app'>2008-12-10T04:45:03.331Z</app:edited> <category scheme='http://schemas.google.com/g/2005#kind' term='http://schemas.google.com/contact/2008#contact'/> <title>Fitzwilliam Darcy</title> <gd:name> <gd:fullName>Tom Chinery</gd:fullName> </gd:name> <link rel='http://schemas.google.com/contacts/2008/rel#photo' type='image/*' href='https://www.google.com/m8/feeds/photos/media/userEmail/contactId' gd:etag='photoEtag'/> <link rel='self' type='application/atom+xml' href='https://www.google.com/m8/feeds/contacts/userEmail/full/contactId'/> <link rel='edit' type='application/atom+xml' href='https://www.google.com/m8/feeds/contacts/userEmail/full/contactId'/> <gd:phoneNumber rel='http://schemas.google.com/g/2005#home' primary='true'> 456 </gd:phoneNumber> <gd:extendedProperty name='pet' value='hamster'/> <gContact:groupMembershipInfo deleted='false' href='http://www.google.com/m8/feeds/groups/userEmail/base/groupId'/> </entry> </feed>"
+
+    xml_string = Nokogiri::XML(response)
+
+    assert_equal [{:name=>"Tom Chinery", :email=>"", :phone=>" 456 "}], Contact.collect_xml_data(xml_string)
 
   end
 end
