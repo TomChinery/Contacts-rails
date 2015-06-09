@@ -4,11 +4,13 @@ class HomeController < ApplicationController
 
   def index
 
-    contacts = Contact.all!(current_user.oauth_token, current_user.email) if current_user
+    if current_user
+      contacts = Contact.all!(current_user.oauth_token, current_user.email)
 
-    @sorted_contacts = contacts.sort_by { |k| k[:name] }
+      @sorted_contacts = contacts.sort_by { |k| k[:name] }
 
-    @paginated_contacts = @sorted_contacts.paginate(:page => params[:page], :per_page => 30)
+      @paginated_contacts = @sorted_contacts.paginate(:page => params[:page], :per_page => 30)
+    end
 
   end
 end

@@ -5,18 +5,32 @@
     <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
     <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
     <%= csrf_meta_tags %>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,600italic,400italic,300italic' rel='stylesheet' type='text/css'>
   </head>
   <body>
+
+    <h1>Contacts</h1>
+    <p>
+      A simple app that lets the user login to Google via OAuth and displays
+      contacts related to that account. Contacts are ordered alphabetically and will display 30 per page.
+      All contacts are shown even ones without a name.
+    </p>
+
+    <div>
+
+      <%= yield %>
+
+    </div>
+
     <div>
       <% if current_user %>
-        Signed in as <strong><%= current_user.name %></strong>!
-        <%= link_to "Sign out", signout_path, id: "sign_out" %>
+        <div class="sign-out">
+          Signed in as <strong><%= current_user.name %></strong>!
+          <%= link_to "Sign out", signout_path, id: "sign_out" %>
+        </div>
       <% else %>
         <%= link_to "Sign in with Google", "/auth/google_oauth2", id: "sign_in" %>
       <% end %>
-    </div>
-    <div>
-    <%= yield %>
     </div>
   </body>
 </html>

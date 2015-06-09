@@ -1,13 +1,17 @@
-<h1>Contacts</h1>
-<p>A simple app that lets the user login to Google via OAuth and display's contacts related to that account.</p>
-
 <% if current_user %>
 
   <% @paginated_contacts.each do |contact| %>
     <div class="contact">
-      <label>Name: <span><%= contact[:name] %></span></label>
-      <label>Email: <span><%= contact[:email] %></span></label>
-      <label>Phone: <span><%= contact[:phone] %></span></label>
+
+      <% if !contact[:name].empty? %>
+        <span><%= contact[:name] %></span>
+        <span><%= contact[:email] %></span>
+        <span><%= contact[:phone] %></span>
+      <% else %>
+        <span><%= contact[:email] %></span>
+        <span><%= contact[:phone] %></span>
+      <% end %>
+
     </div>
   <% end %>
 
