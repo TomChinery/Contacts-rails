@@ -4,7 +4,7 @@ A simple app that lets the user login to Google via OAuth and displays
 contacts related to that account. Contacts are ordered alphabetically and will display 30 per page.
 All contacts are shown even ones without a name.
 
-You can find the app running [here.]()
+You can find the app running [here.](https://arcane-hamlet-8522.herokuapp.com/)
 
 ## Installation
 
